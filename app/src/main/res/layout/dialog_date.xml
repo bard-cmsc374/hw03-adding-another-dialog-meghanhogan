@@ -5,11 +5,13 @@
     android:layout_height="match_parent">
 <TimePicker
             android:id="@+id/dialog_time_time_picker"
+            android:timePickerMode="spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 </TimePicker>
 <DatePicker
             android:id="@+id/dialog_date_date_picker"
+            android:datePickerMode="spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:calendarViewShown="false">
