@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent;
 import android.app.Application;
+import android.support.test.espresso.contrib.PickerActions;
 import android.test.ApplicationTestCase;
 /**
  * Created by meghanhogan on 10/17/16.
@@ -35,12 +36,12 @@ public class ApplicationTest {
     public void testChooseCrime() {
         // Test ability to choose crime fragment from the recycler list
         // Click on the RecyclerView item at position crimeToSelect
-        for (int crimeID = 0; crimeID < 2; crimeID++) {
+
 
         onView(withId(R.id.crime_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.crime_title)).check(matches(withText("Crime #0")));
         Espresso.pressBack();
-          }
+
 
 
     }
@@ -70,7 +71,27 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testDateSelected(){
+    public void testChangeDate(){
+        Crime test;
+        int idx = 0;
+        for (Crime crime : CrimeLab.get(InstrumentationRegistry.getContext()).getCrimes()) {
+            test = crime;
+            //Tests initial date/time
+            onView(withId(R.id.crime_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(idx, click()));
+            onView(withId(R.id.crime_date)).check(matches(withText(crime.getDate().toString())));
+            //Change date and time
+            onView(withId(R.id.crime_date)).perform(click());
+            onView(withId(R.id.dialog_date_date_picker)).perform(PickerActions.setDate(2000, 12, 31));
+            onView(withId(R.id.dialog_time_time_picker)).perform(PickerActions.setTime(12,00));
+            onView(withId(android.R.id.button1)).perform(click());
+            //Test changes
+            onView(withId(R.id.crime_date)).check(matches(withText(crime.getDate().toString())));
+            //Go back and test again
+            Espresso.pressBack();
+            onView(withId(R.id.crime_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(idx, click()));
+            onView(withId(R.id.crime_date)).check(matches(withText(crime.getDate().toString())));
+            idx++;
+        }
 
     }
 }
